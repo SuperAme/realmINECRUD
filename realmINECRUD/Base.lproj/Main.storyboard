@@ -99,8 +99,9 @@
                     <navigationItem key="navigationItem" id="UYH-jl-5AU"/>
                     <connections>
                         <outlet property="ageTxtField" destination="n7B-JG-Wjq" id="wFD-Xy-cFP"/>
-                        <outlet property="emailTxtField" destination="n7B-JG-Wjq" id="hcm-Ne-x1H"/>
-                        <outlet property="nameTxtField" destination="CCP-ib-lYT" id="gob-iD-hJM"/>
+                        <outlet property="countryPicker" destination="Nnu-zS-cRJ" id="UJs-dx-HcA"/>
+                        <outlet property="emailTxtField" destination="CCP-ib-lYT" id="uYb-CL-cTt"/>
+                        <outlet property="nameTxtField" destination="Vrm-1L-Ygb" id="1Rq-Hr-Gx1"/>
                         <outlet property="saveBtn" destination="atj-wC-pCH" id="2JG-ny-TMy"/>
                     </connections>
                 </viewController>
