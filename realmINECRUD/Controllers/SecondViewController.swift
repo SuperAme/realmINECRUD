@@ -7,12 +7,16 @@
 //
 
 import UIKit
+import RealmSwift
 
 struct jsonStruct: Decodable {
     let name: String
 }
 
 class SecondViewController: UIViewController {
+    
+    let realm = try! Realm()
+    var personData: Results<PersonalInfo>?
     
     var countriesArray = [jsonStruct]()
     var pickerCountryName = ""
@@ -24,6 +28,7 @@ class SecondViewController: UIViewController {
     @IBOutlet weak var countryPicker: UIPickerView!
     
     override func viewDidLoad() {
+        print(Realm.Configuration.defaultConfiguration.fileURL)
         super.viewDidLoad()
         saveBtn.layer.cornerRadius = 10
         saveBtn.clipsToBounds = true
@@ -32,8 +37,13 @@ class SecondViewController: UIViewController {
         getData()
     }
     @IBAction func saveBtnPressed(_ sender: UIButton) {
+        let newPerson = PersonalInfo()
         //        var selectedValue = countryPicker![pickerView.selectedRowInComponent(0)]
-        print("name: \(nameTxtField.text!), email: \(emailTxtField.text!), age:\(ageTxtField.text!), country: \(pickerCountryName)")
+        newPerson.fullName = nameTxtField.text!
+        newPerson.email = emailTxtField.text!
+        newPerson.age = ageTxtField.text!
+        newPerson.country = pickerCountryName
+        saveData(person: newPerson)
     }
     
     func getData() {
@@ -55,6 +65,15 @@ class SecondViewController: UIViewController {
     func getCountryName(with countryName: String) -> String {
         pickerCountryName = countryName
         return countryName
+    }
+    func saveData(person: PersonalInfo) {
+        do {
+            try realm.write {
+                realm.add(person)
+            }
+        } catch {
+            print("error saving data \(error)")
+        }
     }
 }
 

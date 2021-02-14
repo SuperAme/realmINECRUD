@@ -23,6 +23,7 @@ class ViewController: UIViewController {
         view.addSubview(tableView)
         tableView.frame = view.bounds
         tableView.dataSource = self
+        tableView.reloadData()
     }
 
     @IBAction func addBtn(_ sender: UIBarButtonItem) {
