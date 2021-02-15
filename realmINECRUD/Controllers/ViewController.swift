@@ -26,12 +26,25 @@ class ViewController: UIViewController {
         view.addSubview(tableView)
         tableView.frame = view.bounds
         tableView.dataSource = self
+    }
+    override func viewWillAppear(_ animated: Bool) {
         loadData()
-        
     }
     
     func loadData() {
         personalData = realm.objects(PersonalInfo.self)
+        tableView.reloadData()
+    }
+    func deleteData(with index: Int) {
+        if let personToDelete = personalData?[index] {
+            do {
+                try realm.write {
+                    realm.delete(personToDelete)
+                }
+            } catch {
+                print("error deleting data \(error)")
+            }
+        }
         tableView.reloadData()
     }
 }
@@ -53,7 +66,7 @@ extension ViewController: SwipeTableViewCellDelegate {
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
         guard orientation == .right else { return nil }
         let deleteAction = SwipeAction(style: .default, title: "Delete") { (action, indexPath) in
-            print("delete \(indexPath.row)")
+            self.deleteData(with: indexPath.row)
         }
         let editAction = SwipeAction(style: .default, title: "Edit") { (action, indexPath) in
             print("edit \(indexPath.row)")
