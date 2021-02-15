@@ -8,5 +8,6 @@ target 'realmINECRUD' do
   # Pods for realmINECRUD
   
   pod 'RealmSwift'
+  pod 'SwipeCellKit'
 
 end

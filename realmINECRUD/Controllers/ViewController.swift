@@ -8,16 +8,16 @@
 
 import UIKit
 import RealmSwift
+import SwipeCellKit
 
 class ViewController: UIViewController {
     
     let realm = try! Realm()
     var personalData: Results<PersonalInfo>?
-    var countriesArray = ["Afghanistan","Algeria","Albania","Andorra","Angola","Austria"]
     
     let tableView: UITableView = {
         let table = UITableView()
-        table.register(UITableViewCell.self, forCellReuseIdentifier: "cellIdentifier")
+        table.register(SwipeTableViewCell.self, forCellReuseIdentifier: "cellIdentifier")
         return table
     }()
 
@@ -41,10 +41,31 @@ extension ViewController: UITableViewDataSource {
         return personalData?.count ?? 1
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cellIdentifier", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cellIdentifier") as! SwipeTableViewCell
+        cell.delegate = self
         cell.textLabel?.text = personalData?[indexPath.row].fullName
+        cell.selectionStyle = .none
         return cell
     }
+}
+
+extension ViewController: SwipeTableViewCellDelegate {
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
+        guard orientation == .right else { return nil }
+        let deleteAction = SwipeAction(style: .default, title: "Delete") { (action, indexPath) in
+            print("delete \(indexPath.row)")
+        }
+        let editAction = SwipeAction(style: .default, title: "Edit") { (action, indexPath) in
+            print("edit \(indexPath.row)")
+        }
+        deleteAction.transitionDelegate = ScaleTransition.default
+        deleteAction.backgroundColor = .red
+        editAction.backgroundColor = #colorLiteral(red: 0.6673910618, green: 0.5333579183, blue: 0, alpha: 1)
+        
+        return [deleteAction, editAction]
+    }
+    
+    
 }
 
 
