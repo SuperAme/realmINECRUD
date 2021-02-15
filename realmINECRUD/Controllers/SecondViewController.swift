@@ -44,6 +44,7 @@ class SecondViewController: UIViewController {
         newPerson.age = ageTxtField.text!
         newPerson.country = pickerCountryName
         saveData(person: newPerson)
+        self.navigationController?.popToRootViewController(animated: true)
     }
     
     func getData() {
@@ -61,10 +62,6 @@ class SecondViewController: UIViewController {
             }
             
         }.resume()
-    }
-    func getCountryName(with countryName: String) -> String {
-        pickerCountryName = countryName
-        return countryName
     }
     func saveData(person: PersonalInfo) {
         do {

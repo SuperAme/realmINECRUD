@@ -7,9 +7,12 @@
 //
 
 import UIKit
+import RealmSwift
 
 class ViewController: UIViewController {
     
+    let realm = try! Realm()
+    var personalData: Results<PersonalInfo>?
     var countriesArray = ["Afghanistan","Algeria","Albania","Andorra","Angola","Austria"]
     
     let tableView: UITableView = {
@@ -23,21 +26,23 @@ class ViewController: UIViewController {
         view.addSubview(tableView)
         tableView.frame = view.bounds
         tableView.dataSource = self
-        tableView.reloadData()
-    }
-
-    @IBAction func addBtn(_ sender: UIBarButtonItem) {
+        loadData()
+        
     }
     
+    func loadData() {
+        personalData = realm.objects(PersonalInfo.self)
+        tableView.reloadData()
+    }
 }
 
 extension ViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return countriesArray.count
+        return personalData?.count ?? 1
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cellIdentifier", for: indexPath)
-        cell.textLabel?.text = countriesArray[indexPath.row]
+        cell.textLabel?.text = personalData?[indexPath.row].fullName
         return cell
     }
 }
