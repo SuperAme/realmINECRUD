@@ -14,6 +14,10 @@ class ViewController: UIViewController {
     
     let realm = try! Realm()
     var personalData: Results<PersonalInfo>?
+    var nameToSend = ""
+    var emailToSend = ""
+    var ageToSend = ""
+    var countryToSend = ""
     
     let tableView: UITableView = {
         let table = UITableView()
@@ -47,6 +51,15 @@ class ViewController: UIViewController {
         }
         tableView.reloadData()
     }
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "mySegueIdentifier" {
+            let secondVC = segue.destination as? SecondViewController
+            secondVC?.nameSended = nameToSend
+            secondVC?.emailSended = emailToSend
+            secondVC?.ageSended = ageToSend
+            secondVC?.countrySended = countryToSend
+        }
+    }
 }
 
 extension ViewController: UITableViewDataSource {
@@ -65,11 +78,16 @@ extension ViewController: UITableViewDataSource {
 extension ViewController: SwipeTableViewCellDelegate {
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
         guard orientation == .right else { return nil }
+        nameToSend = personalData?[indexPath.row].fullName ?? ""
+        emailToSend = personalData?[indexPath.row].email ?? ""
+        ageToSend = personalData?[indexPath.row].age ?? ""
+        countryToSend = personalData?[indexPath.row].country ?? ""
         let deleteAction = SwipeAction(style: .default, title: "Delete") { (action, indexPath) in
             self.deleteData(with: indexPath.row)
         }
         let editAction = SwipeAction(style: .default, title: "Edit") { (action, indexPath) in
-            print("edit \(indexPath.row)")
+            self.performSegue(withIdentifier: "mySegueIdentifier", sender: self)
+            
         }
         deleteAction.transitionDelegate = ScaleTransition.default
         deleteAction.backgroundColor = .red

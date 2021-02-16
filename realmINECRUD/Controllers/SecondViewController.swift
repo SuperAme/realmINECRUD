@@ -17,9 +17,15 @@ class SecondViewController: UIViewController {
     
     let realm = try! Realm()
     var personData: Results<PersonalInfo>?
+    var nameSended: String?
+    var emailSended: String?
+    var ageSended: String?
+    var countrySended: String?
     
     var countriesArray = [jsonStruct]()
     var pickerCountryName = ""
+    var nume = 0
+    
     
     @IBOutlet weak var nameTxtField: UITextField!
     @IBOutlet weak var emailTxtField: UITextField!
@@ -35,10 +41,17 @@ class SecondViewController: UIViewController {
         countryPicker.dataSource = self
         countryPicker.delegate = self
         getData()
+        nameTxtField.text = nameSended
+        emailTxtField.text = emailSended
+        ageTxtField.text = ageSended
+        
+    }
+    override func viewDidAppear(_ animated: Bool) {
+        let filtered: [Int] = countriesArray.indices.filter({ countriesArray[$0].name == countrySended})
+        countryPicker.selectRow(filtered.first ?? 0, inComponent: 0, animated: true)
     }
     @IBAction func saveBtnPressed(_ sender: UIButton) {
         let newPerson = PersonalInfo()
-        //        var selectedValue = countryPicker![pickerView.selectedRowInComponent(0)]
         newPerson.fullName = nameTxtField.text!
         newPerson.email = emailTxtField.text!
         newPerson.age = ageTxtField.text!
@@ -85,6 +98,7 @@ extension SecondViewController: UIPickerViewDataSource {
 
 extension SecondViewController: UIPickerViewDelegate {
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        
         pickerCountryName = countriesArray[row].name
     }
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {

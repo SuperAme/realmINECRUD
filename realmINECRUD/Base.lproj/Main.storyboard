@@ -20,7 +20,7 @@
                     <navigationItem key="navigationItem" id="VtS-Tv-c5z">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="myc-0y-Fri">
                             <connections>
-                                <segue destination="lJQ-1F-Tec" kind="show" id="nkt-TB-tDU"/>
+                                <segue destination="lJQ-1F-Tec" kind="show" identifier="mySegueIdentifier" id="nkt-TB-tDU"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
