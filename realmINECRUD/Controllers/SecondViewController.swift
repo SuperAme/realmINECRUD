@@ -21,10 +21,11 @@ class SecondViewController: UIViewController {
     var emailSended: String?
     var ageSended: String?
     var countrySended: String?
+    var numOfRowSended = 0
     
     var countriesArray = [jsonStruct]()
     var pickerCountryName = ""
-    var nume = 0
+    
     
     
     @IBOutlet weak var nameTxtField: UITextField!
@@ -34,7 +35,7 @@ class SecondViewController: UIViewController {
     @IBOutlet weak var countryPicker: UIPickerView!
     
     override func viewDidLoad() {
-        print(Realm.Configuration.defaultConfiguration.fileURL)
+        //        print(Realm.Configuration.defaultConfiguration.fileURL)
         super.viewDidLoad()
         saveBtn.layer.cornerRadius = 10
         saveBtn.clipsToBounds = true
@@ -44,20 +45,42 @@ class SecondViewController: UIViewController {
         nameTxtField.text = nameSended
         emailTxtField.text = emailSended
         ageTxtField.text = ageSended
-        
+        loadData()
     }
     override func viewDidAppear(_ animated: Bool) {
         let filtered: [Int] = countriesArray.indices.filter({ countriesArray[$0].name == countrySended})
         countryPicker.selectRow(filtered.first ?? 0, inComponent: 0, animated: true)
     }
+    func loadData() {
+        personData = realm.objects(PersonalInfo.self)
+        print(personData)
+    }
     @IBAction func saveBtnPressed(_ sender: UIButton) {
         let newPerson = PersonalInfo()
-        newPerson.fullName = nameTxtField.text!
-        newPerson.email = emailTxtField.text!
-        newPerson.age = ageTxtField.text!
-        newPerson.country = pickerCountryName
-        saveData(person: newPerson)
-        self.navigationController?.popToRootViewController(animated: true)
+        //        print(nameSended, emailSended)
+        if nameSended != "" && emailSended != "" && ageSended != "" {
+            if let personToUpdate = personData?[numOfRowSended] {
+                do {
+                    try self.realm.write {
+                        personToUpdate.fullName = nameTxtField.text!
+                        personToUpdate.email = emailTxtField.text!
+                        personToUpdate.age = ageTxtField.text!
+                        personToUpdate.country = pickerCountryName
+                    }
+                } catch {
+                    print("error updating data \(error)")
+                }
+                self.navigationController?.popToRootViewController(animated: true)
+            }
+        } else {
+            newPerson.fullName = nameTxtField.text!
+            newPerson.email = emailTxtField.text!
+            newPerson.age = ageTxtField.text!
+            newPerson.country = pickerCountryName
+            saveData(person: newPerson)
+            self.navigationController?.popToRootViewController(animated: true)
+        }
+        
     }
     
     func getData() {

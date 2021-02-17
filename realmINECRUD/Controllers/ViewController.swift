@@ -18,6 +18,7 @@ class ViewController: UIViewController {
     var emailToSend = ""
     var ageToSend = ""
     var countryToSend = ""
+    var indexToSend = 0
     
     let tableView: UITableView = {
         let table = UITableView()
@@ -58,8 +59,17 @@ class ViewController: UIViewController {
             secondVC?.emailSended = emailToSend
             secondVC?.ageSended = ageToSend
             secondVC?.countrySended = countryToSend
+            secondVC?.numOfRowSended = indexToSend
         }
     }
+    @IBAction func addButtonReset(_ sender: UIBarButtonItem) {
+        nameToSend = ""
+        emailToSend = ""
+        ageToSend = ""
+        countryToSend = ""
+        indexToSend = 0
+    }
+    
 }
 
 extension ViewController: UITableViewDataSource {
@@ -82,6 +92,8 @@ extension ViewController: SwipeTableViewCellDelegate {
         emailToSend = personalData?[indexPath.row].email ?? ""
         ageToSend = personalData?[indexPath.row].age ?? ""
         countryToSend = personalData?[indexPath.row].country ?? ""
+        indexToSend = indexPath.row
+        
         let deleteAction = SwipeAction(style: .default, title: "Delete") { (action, indexPath) in
             self.deleteData(with: indexPath.row)
         }

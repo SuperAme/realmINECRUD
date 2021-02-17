@@ -20,6 +20,7 @@
                     <navigationItem key="navigationItem" id="VtS-Tv-c5z">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="myc-0y-Fri">
                             <connections>
+                                <action selector="addButtonReset:" destination="BYZ-38-t0r" id="1eq-Ez-IZV"/>
                                 <segue destination="lJQ-1F-Tec" kind="show" identifier="mySegueIdentifier" id="nkt-TB-tDU"/>
                             </connections>
                         </barButtonItem>
